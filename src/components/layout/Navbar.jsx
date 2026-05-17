@@ -3,13 +3,21 @@ import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const { token, logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const linkStyle =
     "hover:text-cyan-500 transition duration-300";
+
+  const handleLogout = () => {
+    logout();
+    setOpen(false);
+    navigate("/login");
+  };
 
   return (
     <nav
@@ -38,7 +46,6 @@ function Navbar() {
       "
       >
         {/* Logo */}
-
         <Link
           to="/"
           className="
@@ -51,7 +58,6 @@ function Navbar() {
         </Link>
 
         {/* Desktop Menu */}
-
         <div
           className="
           hidden
@@ -60,31 +66,22 @@ function Navbar() {
           gap-6
         "
         >
-          <Link
-            to="/"
-            className={linkStyle}
-          >
+          <Link to="/" className={linkStyle}>
             Home
           </Link>
 
-          <Link
-            to="/create"
-            className={linkStyle}
-          >
+          <Link to="/create" className={linkStyle}>
             Create
           </Link>
 
           {token ? (
             <>
-              <Link
-                to="/dashboard"
-                className={linkStyle}
-              >
+              <Link to="/dashboard" className={linkStyle}>
                 Dashboard
               </Link>
 
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="
                 px-4
                 py-2
@@ -99,10 +96,7 @@ function Navbar() {
               </button>
             </>
           ) : (
-            <Link
-              to="/login"
-              className={linkStyle}
-            >
+            <Link to="/login" className={linkStyle}>
               Login
             </Link>
           )}
@@ -110,8 +104,7 @@ function Navbar() {
           <ThemeToggle />
         </div>
 
-        {/* Hamburger → Mobile + Tablet ONLY */}
-
+        {/* Hamburger */}
         <button
           onClick={() => setOpen(!open)}
           className="
@@ -120,16 +113,11 @@ function Navbar() {
           p-2
         "
         >
-          {open ? (
-            <FaTimes />
-          ) : (
-            <FaBars />
-          )}
+          {open ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
-
+      {/* Mobile Menu */}
       {open && (
         <div
           className="
@@ -144,21 +132,11 @@ function Navbar() {
           border-[var(--border)]
         "
         >
-          <Link
-            to="/"
-            onClick={() =>
-              setOpen(false)
-            }
-          >
+          <Link to="/" onClick={() => setOpen(false)}>
             Home
           </Link>
 
-          <Link
-            to="/create"
-            onClick={() =>
-              setOpen(false)
-            }
-          >
+          <Link to="/create" onClick={() => setOpen(false)}>
             Create
           </Link>
 
@@ -166,18 +144,13 @@ function Navbar() {
             <>
               <Link
                 to="/dashboard"
-                onClick={() =>
-                  setOpen(false)
-                }
+                onClick={() => setOpen(false)}
               >
                 Dashboard
               </Link>
 
               <button
-                onClick={() => {
-                  logout();
-                  setOpen(false);
-                }}
+                onClick={handleLogout}
                 className="
                 bg-red-500
                 text-white
@@ -189,12 +162,7 @@ function Navbar() {
               </button>
             </>
           ) : (
-            <Link
-              to="/login"
-              onClick={() =>
-                setOpen(false)
-              }
-            >
+            <Link to="/login" onClick={() => setOpen(false)}>
               Login
             </Link>
           )}
