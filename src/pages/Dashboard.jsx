@@ -1,4 +1,6 @@
 import useFetch from "../hooks/useFetch";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const {
@@ -6,11 +8,36 @@ function Dashboard() {
     loading,
   } = useFetch("/posts");
 
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // redirect to home after logout
+  };
+
   return (
     <div>
       <h1 className="text-4xl font-bold mb-6">
         Dashboard
       </h1>
+
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="
+          mb-6
+          px-4
+          py-2
+          rounded-xl
+          bg-red-500
+          text-white
+          hover:scale-105
+          transition
+        "
+      >
+        Logout
+      </button>
 
       <div
         className="
